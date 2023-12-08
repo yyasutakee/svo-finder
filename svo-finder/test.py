@@ -133,6 +133,60 @@ class SVO:
             print(msg)
             return msg
 
+
+
+    def find_v_from_a_sentence(self, sentence):
+
+        nlp = spacy.load("en_core_web_sm")
+
+        doc = nlp(sentence)
+
+        root = None
+        print(doc)
+
+        i = 0
+
+        length = 0
+
+        # GET INDEX
+
+        # GET LENGTH
+
+        for token in doc:
+            
+            if token.dep_ == "ROOT":
+                root = token
+
+                length = len(token)
+                break
+
+            i += len(token) + 1
+
+
+        
+        if root is not None:
+            subject = self.find_subject(root)
+            acomp_object = self.find_acomp_or_object(root)
+            if subject is not None:
+                subject_text = subject.text
+            else:
+                subject_text = "-"
+
+
+            root_text = root.text
+
+            return (i, length)
+            return root_text
+    
+        else:
+            msg = "No root found in the sentence"
+            print(msg)
+            return ""
+        
+       
+
+
+
             
 
     def find_v(self, strings):
@@ -146,85 +200,89 @@ class SVO:
         return capitalized_strings
     
 
-    # PASTE TEXT
 
-    # GET TEXT
+import tkinter as tk
 
-    # CREATE ARRAY
+def on_button_click():
+    entered_text = entry.get()
+    print("Text entered:", entered_text)
 
-    # GET INDEX AND LENGTH
 
-    # 
+    s = SVO()
+
+    sentences = s.create_array(entered_text)
+
+
+
 
 s = SVO()
 
-array = s.create_array("There is nothing quite so helpful and satisfying as a well-described public API. The java- docs for the standard Java library are a case in point. It would be difficult, at best, to write Java programs without them. If you are writing a public API, then you should certainly write good javadocs for it. But keep in mind the rest of the advice in this chapter. Javadocs can be just as misleading, nonlocal, and dishonest as any other kind of comment.")
+v = s.find_v_from_a_sentence("Many users rely on private browsers to keep their Internet habits away from prying eyes. ")
 
-# s.find_v(array)
+# print(v)
 
-
-sentences = ["Nowadays, most good IDEs provide special gestures and features to locate all the TODO comments, so it’s not likely that they will get lost.", 
-                        "Still, you don’t want your code to be littered with TODOs. So scan through them regularly and eliminate the ones you can.", 
-                        "A comment may be used to amplify the importance of something that may otherwise seem inconsequential."]
-
-# find_v(sentences)
-
-# def get_text_content():
-#     content = text_widget.get("1.0", tk.END)  # Retrieve text from the Text widget
-#     cleaned_text = content.replace('\n', '').replace('\r', '').strip()
-
-#     print(cleaned_text)
-
-# def set_text_content():
-#     new_content = "New text content."
-#     text_widget.delete("1.0", tk.END)  # Clear existing content
-#     text_widget.insert(tk.END, new_content)  # Set new content
-
-# # Function for the "Custom Action" button
-# def custom_action():
-#     # Add your custom action here
-#     print("Custom action executed.")
-
+# # Create the main window
 # root = tk.Tk()
-# root.title("")
+# root.title("Text Field Example")
 
-#     # Create a Text widget
-# text_widget = tk.Text(root, height=10, width=40, wrap=tk.WORD)
-# text_widget.pack(padx=10, pady=10)
+# # Create a text field
+# entry = tk.Entry(root, width=30)
+# entry.pack(pady=10)
 
-#     # Create buttons to interact with the Text widget
-# get_button = tk.Button(root, text="Get Text", command=get_text_content)
-# get_button.pack(pady=5)
+# # Create a button
+# button = tk.Button(root, text="Get Text", command=on_button_click)
 
-# set_button = tk.Button(root, text="Set Text", command=set_text_content)
-# set_button.pack(pady=5)
+# button.pack()
 
-#     # Create a button for a custom action
-# custom_button = tk.Button(root, text="Custom Action", command=custom_action)
-# custom_button.pack(pady=5)
-
-#     # Run the Tkinter event loop
+# Start the Tkinter event loop
 # root.mainloop()
-# 
+
+
 
 # def start_tkinter(self):
 import tkinter as tk
 
 def change_text_color():
     # Change the color of the word "michael" to blue
-    start_index = text_widget1.search("michael", "1.0", tk.END, count=tk.END)
-    end_index = f"{start_index}+7c"
+
+    text_from_widget1 = text_widget1.get("1.0", tk.END)
+
+
+    s = SVO()
+
+    v = s.find_v_from_a_sentence(text_from_widget1)
+
+ 
+    start_index = v[0]
+
+
+    length = v[1]
+
+    start_index = f"1.{start_index}"
+
+    # start_index = float(start_index)
+
+ 
+ 
+    # end_index = v[0] + v[1]
+
+    # end_index = f"1.{length}"
+
+    # end_index = float(end_index)
+
+    end_index = start_index + "+" + f"{length}c"
+  #  start_index = text_widget1.search("my", "1.0", tk.END, count=tk.END)
+    # end_index = f"{start_index}+{length}c"
+
+
+    print(f"start index {start_index}")
+
+    print(f"edn index {end_index}")
+
+
+
+
     text_widget1.tag_configure("blue_tag", foreground="blue")
-
-
-    print(start_index)
-
-    print(type(start_index))
-
-    print(end_index)
-
-    print(type(end_index))
-
     text_widget1.tag_add("blue_tag", start_index, end_index)
 
 root = tk.Tk()
@@ -248,7 +306,3 @@ button = tk.Button(root, text="Change Text Color", command=change_text_color)
 button.pack(pady=5)
 
 root.mainloop()
-
-# GET TEXT
-# SHOW BELOW
-# I NEED GET INDEX AND LENGTH OF VERB
